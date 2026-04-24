@@ -6,6 +6,8 @@ import com.fundoonotes.repository.NoteRepository;
 import com.fundoonotes.service.NoteService;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class NoteServiceImpl implements NoteService {
 
@@ -24,5 +26,10 @@ public class NoteServiceImpl implements NoteService {
         note.setContent(dto.getContent());
 
         return noteRepository.save(note);
+    }
+
+    @Override
+    public List<Note> getNotes(Long userId) {
+        return noteRepository.findByUserId(userId);
     }
 }

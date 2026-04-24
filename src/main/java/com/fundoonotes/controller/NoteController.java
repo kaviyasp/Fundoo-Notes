@@ -6,6 +6,8 @@ import com.fundoonotes.service.NoteService;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/notes")
 public class NoteController {
@@ -23,5 +25,13 @@ public class NoteController {
         Long userId = (Long) authentication.getPrincipal();
 
         return noteService.createNote(userId, dto);
+    }
+
+    @GetMapping
+    public List<Note> getNotes(Authentication authentication) {
+
+        Long userId = (Long) authentication.getPrincipal();
+
+        return noteService.getNotes(userId);
     }
 }
