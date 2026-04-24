@@ -23,7 +23,6 @@ public class NoteController {
                            Authentication authentication) {
 
         Long userId = (Long) authentication.getPrincipal();
-
         return noteService.createNote(userId, dto);
     }
 
@@ -31,7 +30,27 @@ public class NoteController {
     public List<Note> getNotes(Authentication authentication) {
 
         Long userId = (Long) authentication.getPrincipal();
-
         return noteService.getNotes(userId);
+    }
+
+    @PutMapping("/{id}/pin")
+    public Note togglePin(@PathVariable Long id, Authentication authentication) {
+
+        Long userId = (Long) authentication.getPrincipal();
+        return noteService.togglePin(userId, id);
+    }
+
+    @PutMapping("/{id}/archive")
+    public Note toggleArchive(@PathVariable Long id, Authentication authentication) {
+
+        Long userId = (Long) authentication.getPrincipal();
+        return noteService.toggleArchive(userId, id);
+    }
+
+    @PutMapping("/{id}/trash")
+    public Note toggleTrash(@PathVariable Long id, Authentication authentication) {
+
+        Long userId = (Long) authentication.getPrincipal();
+        return noteService.toggleTrash(userId, id);
     }
 }

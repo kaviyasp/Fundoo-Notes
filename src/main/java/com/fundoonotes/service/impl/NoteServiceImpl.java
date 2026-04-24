@@ -32,4 +32,46 @@ public class NoteServiceImpl implements NoteService {
     public List<Note> getNotes(Long userId) {
         return noteRepository.findByUserId(userId);
     }
+
+    @Override
+    public Note togglePin(Long userId, Long noteId) {
+
+        Note note = noteRepository.findById(noteId).orElseThrow();
+
+        if (!note.getUserId().equals(userId)) {
+            throw new RuntimeException("Unauthorized");
+        }
+
+        note.setPinned(!note.isPinned());
+
+        return noteRepository.save(note);
+    }
+
+    @Override
+    public Note toggleArchive(Long userId, Long noteId) {
+
+        Note note = noteRepository.findById(noteId).orElseThrow();
+
+        if (!note.getUserId().equals(userId)) {
+            throw new RuntimeException("Unauthorized");
+        }
+
+        note.setArchived(!note.isArchived());
+
+        return noteRepository.save(note);
+    }
+
+    @Override
+    public Note toggleTrash(Long userId, Long noteId) {
+
+        Note note = noteRepository.findById(noteId).orElseThrow();
+
+        if (!note.getUserId().equals(userId)) {
+            throw new RuntimeException("Unauthorized");
+        }
+
+        note.setTrashed(!note.isTrashed());
+
+        return noteRepository.save(note);
+    }
 }
