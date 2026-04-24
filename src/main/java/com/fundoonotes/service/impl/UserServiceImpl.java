@@ -64,10 +64,10 @@ public class UserServiceImpl implements UserService {
 
         String token = jwtService.generateToken(user.getId());
 
-        // 🔥 DEBUG PRINT (IMPORTANT)
-        System.out.println("🔥 Saving token to Redis: " + token);
+        // DEBUG PRINT
+        System.out.println(" Saving token to Redis: " + token);
 
-        // 🔥 Store token in Redis (TTL = 1 day)
+        // Store token in Redis (TTL = 1 day)
         redisService.save("TOKEN_" + user.getId(), token, 86400);
 
         return new LoginResponseDto(token, "Login successful");

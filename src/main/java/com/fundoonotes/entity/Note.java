@@ -15,7 +15,7 @@ public class Note implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private Long userId; // important (no relation mapping)
+    private Long userId;
 
     private String title;
 

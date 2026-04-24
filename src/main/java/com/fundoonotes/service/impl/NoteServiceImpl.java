@@ -5,9 +5,11 @@ import com.fundoonotes.entity.Note;
 import com.fundoonotes.repository.NoteRepository;
 import com.fundoonotes.service.NoteService;
 import com.fundoonotes.messaging.JmsProducer;
+import com.fundoonotes.util.ExcelHelper;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -40,7 +42,7 @@ public class NoteServiceImpl implements NoteService {
 
         Note saved = noteRepository.save(note);
 
-        // 🔥 JMS MESSAGE
+        // JMS message
         jmsProducer.sendMessage("Note created with id: " + saved.getId());
 
         return saved;
@@ -71,5 +73,16 @@ public class NoteServiceImpl implements NoteService {
         if (!note.getUserId().equals(userId)) throw new RuntimeException("Unauthorized");
         note.setTrashed(!note.isTrashed());
         return noteRepository.save(note);
+    }
+
+    // EXCEL UPLOAD
+    @Override
+    public void uploadExcel(Long userId, MultipartFile file) {
+        try {
+            List<Note> notes = ExcelHelper.excelToNotes(file.getInputStream(), userId);
+            noteRepository.saveAll(notes);
+        } catch (Exception e) {
+            throw new RuntimeException("Excel upload failed");
+        }
     }
 }

@@ -12,7 +12,6 @@ public class UserResponseDto {
         this.email = email;
     }
 
-    // Getters
     public Long getId() {
         return id;
     }
