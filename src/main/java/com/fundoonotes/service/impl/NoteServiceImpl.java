@@ -4,6 +4,7 @@ import com.fundoonotes.dto.request.CreateNoteRequestDto;
 import com.fundoonotes.entity.Note;
 import com.fundoonotes.repository.NoteRepository;
 import com.fundoonotes.service.NoteService;
+import com.fundoonotes.messaging.MessageProducer;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -12,9 +13,11 @@ import java.util.List;
 public class NoteServiceImpl implements NoteService {
 
     private final NoteRepository noteRepository;
+    private final MessageProducer producer;
 
-    public NoteServiceImpl(NoteRepository noteRepository) {
+    public NoteServiceImpl(NoteRepository noteRepository, MessageProducer producer) {
         this.noteRepository = noteRepository;
+        this.producer = producer;
     }
 
     @Override
@@ -25,7 +28,11 @@ public class NoteServiceImpl implements NoteService {
         note.setTitle(dto.getTitle());
         note.setContent(dto.getContent());
 
-        return noteRepository.save(note);
+        Note saved = noteRepository.save(note);
+
+        producer.sendMessage("New note created with id: " + saved.getId());
+
+        return saved;
     }
 
     @Override
@@ -35,43 +42,25 @@ public class NoteServiceImpl implements NoteService {
 
     @Override
     public Note togglePin(Long userId, Long noteId) {
-
         Note note = noteRepository.findById(noteId).orElseThrow();
-
-        if (!note.getUserId().equals(userId)) {
-            throw new RuntimeException("Unauthorized");
-        }
-
+        if (!note.getUserId().equals(userId)) throw new RuntimeException("Unauthorized");
         note.setPinned(!note.isPinned());
-
         return noteRepository.save(note);
     }
 
     @Override
     public Note toggleArchive(Long userId, Long noteId) {
-
         Note note = noteRepository.findById(noteId).orElseThrow();
-
-        if (!note.getUserId().equals(userId)) {
-            throw new RuntimeException("Unauthorized");
-        }
-
+        if (!note.getUserId().equals(userId)) throw new RuntimeException("Unauthorized");
         note.setArchived(!note.isArchived());
-
         return noteRepository.save(note);
     }
 
     @Override
     public Note toggleTrash(Long userId, Long noteId) {
-
         Note note = noteRepository.findById(noteId).orElseThrow();
-
-        if (!note.getUserId().equals(userId)) {
-            throw new RuntimeException("Unauthorized");
-        }
-
+        if (!note.getUserId().equals(userId)) throw new RuntimeException("Unauthorized");
         note.setTrashed(!note.isTrashed());
-
         return noteRepository.save(note);
     }
 }
