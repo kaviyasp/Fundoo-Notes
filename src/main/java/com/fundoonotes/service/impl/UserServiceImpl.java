@@ -5,12 +5,11 @@ import com.fundoonotes.dto.request.LoginRequestDto;
 import com.fundoonotes.dto.response.UserResponseDto;
 import com.fundoonotes.dto.response.LoginResponseDto;
 import com.fundoonotes.entity.User;
-import com.fundoonotes.exception.UserAlreadyExistsException;
-import com.fundoonotes.exception.InvalidCredentialsException;
-import com.fundoonotes.exception.UserNotFoundException;
+import com.fundoonotes.exception.*;
 import com.fundoonotes.repository.UserRepository;
-import com.fundoonotes.service.UserService;
 import com.fundoonotes.security.JwtService;
+import com.fundoonotes.service.UserService;
+import com.fundoonotes.service.RedisService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -19,14 +18,17 @@ public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
-    private final JwtService jwtUtil;
+    private final JwtService jwtService;
+    private final RedisService redisService;
 
     public UserServiceImpl(UserRepository userRepository,
                            PasswordEncoder passwordEncoder,
-                           JwtService jwtUtil) {
+                           JwtService jwtService,
+                           RedisService redisService) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
-        this.jwtUtil = jwtUtil;
+        this.jwtService = jwtService;
+        this.redisService = redisService;
     }
 
     @Override
@@ -60,7 +62,13 @@ public class UserServiceImpl implements UserService {
             throw new InvalidCredentialsException("Invalid credentials");
         }
 
-        String token = jwtUtil.generateToken(user.getId());
+        String token = jwtService.generateToken(user.getId());
+
+        // 🔥 DEBUG PRINT (IMPORTANT)
+        System.out.println("🔥 Saving token to Redis: " + token);
+
+        // 🔥 Store token in Redis (TTL = 1 day)
+        redisService.save("TOKEN_" + user.getId(), token, 86400);
 
         return new LoginResponseDto(token, "Login successful");
     }

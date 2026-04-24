@@ -5,7 +5,7 @@ spring:
   datasource:
     url: jdbc:mysql://localhost:3306/fundoo_notes
     username: root
-    password: pass
+    password: ur pass
     driver-class-name: com.mysql.cj.jdbc.Driver
 
   jpa:
@@ -15,3 +15,8 @@ spring:
     properties:
       hibernate:
         format_sql: true
+
+  data:
+    redis:
+      host: localhost
+      port: 6379
