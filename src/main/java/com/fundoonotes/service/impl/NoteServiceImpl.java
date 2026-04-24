@@ -5,6 +5,8 @@ import com.fundoonotes.entity.Note;
 import com.fundoonotes.repository.NoteRepository;
 import com.fundoonotes.service.NoteService;
 import com.fundoonotes.messaging.MessageProducer;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -21,6 +23,14 @@ public class NoteServiceImpl implements NoteService {
     }
 
     @Override
+    @Cacheable(value = "notes", key = "#userId")
+    public List<Note> getNotes(Long userId) {
+        System.out.println("🔥 Fetching from DB...");
+        return noteRepository.findByUserId(userId);
+    }
+
+    @Override
+    @CacheEvict(value = "notes", key = "#userId")
     public Note createNote(Long userId, CreateNoteRequestDto dto) {
 
         Note note = new Note();
@@ -36,11 +46,7 @@ public class NoteServiceImpl implements NoteService {
     }
 
     @Override
-    public List<Note> getNotes(Long userId) {
-        return noteRepository.findByUserId(userId);
-    }
-
-    @Override
+    @CacheEvict(value = "notes", key = "#userId")
     public Note togglePin(Long userId, Long noteId) {
         Note note = noteRepository.findById(noteId).orElseThrow();
         if (!note.getUserId().equals(userId)) throw new RuntimeException("Unauthorized");
@@ -49,6 +55,7 @@ public class NoteServiceImpl implements NoteService {
     }
 
     @Override
+    @CacheEvict(value = "notes", key = "#userId")
     public Note toggleArchive(Long userId, Long noteId) {
         Note note = noteRepository.findById(noteId).orElseThrow();
         if (!note.getUserId().equals(userId)) throw new RuntimeException("Unauthorized");
@@ -57,6 +64,7 @@ public class NoteServiceImpl implements NoteService {
     }
 
     @Override
+    @CacheEvict(value = "notes", key = "#userId")
     public Note toggleTrash(Long userId, Long noteId) {
         Note note = noteRepository.findById(noteId).orElseThrow();
         if (!note.getUserId().equals(userId)) throw new RuntimeException("Unauthorized");
