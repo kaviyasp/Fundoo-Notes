@@ -4,7 +4,7 @@ import com.fundoonotes.dto.request.CreateNoteRequestDto;
 import com.fundoonotes.entity.Note;
 import com.fundoonotes.repository.NoteRepository;
 import com.fundoonotes.service.NoteService;
-import com.fundoonotes.messaging.MessageProducer;
+import com.fundoonotes.messaging.JmsProducer;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.stereotype.Service;
@@ -15,11 +15,11 @@ import java.util.List;
 public class NoteServiceImpl implements NoteService {
 
     private final NoteRepository noteRepository;
-    private final MessageProducer producer;
+    private final JmsProducer jmsProducer;
 
-    public NoteServiceImpl(NoteRepository noteRepository, MessageProducer producer) {
+    public NoteServiceImpl(NoteRepository noteRepository, JmsProducer jmsProducer) {
         this.noteRepository = noteRepository;
-        this.producer = producer;
+        this.jmsProducer = jmsProducer;
     }
 
     @Override
@@ -40,7 +40,8 @@ public class NoteServiceImpl implements NoteService {
 
         Note saved = noteRepository.save(note);
 
-        producer.sendMessage("New note created with id: " + saved.getId());
+        // 🔥 JMS MESSAGE
+        jmsProducer.sendMessage("Note created with id: " + saved.getId());
 
         return saved;
     }
