@@ -10,7 +10,7 @@ import com.fundoonotes.exception.InvalidCredentialsException;
 import com.fundoonotes.exception.UserNotFoundException;
 import com.fundoonotes.repository.UserRepository;
 import com.fundoonotes.service.UserService;
-import com.fundoonotes.util.JwtUtil;
+import com.fundoonotes.security.JwtService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -19,11 +19,11 @@ public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
-    private final JwtUtil jwtUtil;
+    private final JwtService jwtUtil;
 
     public UserServiceImpl(UserRepository userRepository,
                            PasswordEncoder passwordEncoder,
-                           JwtUtil jwtUtil) {
+                           JwtService jwtUtil) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
         this.jwtUtil = jwtUtil;
