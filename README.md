@@ -1,4 +1,4 @@
-# 📒 Fundoo Notes Backend
+# Fundoo Notes Backend
 
 A robust, enterprise-grade backend system built using **Spring Boot** for managing notes with authentication, caching, messaging, and batch processing capabilities.
 
@@ -10,7 +10,7 @@ A robust, enterprise-grade backend system built using **Spring Boot** for managi
 
 ---
 
-## 🚀 Tech Stack
+## Tech Stack
 
 * Java 17
 * Spring Boot
@@ -26,15 +26,15 @@ A robust, enterprise-grade backend system built using **Spring Boot** for managi
 
 ---
 
-## 🏗️ Architecture
+## Architecture
 
 * Client → Controller → DTO → Service → Repository → Database
 
 ---
 
-## 📌 Use Case Implementation (UC1 – UC16)
+## Use Case Implementation (UC1 – UC16)
 
-### 🔹 Phase 1 — Core Backend
+### Phase 1 — Core Backend
 
 * **UC1: Project Setup**
 
@@ -90,7 +90,7 @@ A robust, enterprise-grade backend system built using **Spring Boot** for managi
 
 ---
 
-### 🔹 Phase 2 — Advanced Backend
+### Phase 2 — Advanced Backend
 
 * **UC11: AOP Logging**
 
@@ -126,14 +126,14 @@ A robust, enterprise-grade backend system built using **Spring Boot** for managi
 
 ---
 
-## 📦 API Endpoints
+## API Endpoints
 
-### 🔹 User APIs
+### User APIs
 
 * POST `/api/users/register`
 * POST `/api/users/login`
 
-### 🔹 Note APIs
+### Note APIs
 
 * POST `/api/notes`
 * GET `/api/notes`
@@ -141,13 +141,13 @@ A robust, enterprise-grade backend system built using **Spring Boot** for managi
 * PUT `/api/notes/{id}/archive`
 * PUT `/api/notes/{id}/trash`
 
-### 🔹 Batch API
+### Batch API
 
 * POST `/api/notes/upload` (Excel Upload)
 
 ---
 
-## 🧪 How to Run
+## How to Run
 
 ### 1. Clone Repository
 
@@ -190,7 +190,7 @@ mvn spring-boot:run
 
 ---
 
-## 📊 Excel Upload Format
+## Excel Upload Format
 
 | title  | content |
 | ------ | ------- |
@@ -199,7 +199,7 @@ mvn spring-boot:run
 
 ---
 
-## 🔥 Key Highlights
+## Key Highlights
 
 * Secure backend using JWT authentication
 * Redis caching for performance optimization
@@ -209,7 +209,7 @@ mvn spring-boot:run
 
 ---
 
-## 📌 Future Enhancements
+## Future Enhancements
 
 * Swagger API Documentation
 * Microservices Architecture
